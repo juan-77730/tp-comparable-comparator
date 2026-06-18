@@ -1,5 +1,6 @@
 package model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -8,7 +9,9 @@ import java.util.*;
 @RequestMapping("/api/estudiantes")
 public class EstudianteController {
 
-    private final EstudianteService service = new EstudianteService();
+    // ✅ Usamos la anotación oficial de Spring en lugar de usar 'new'
+    @Autowired
+    private EstudianteService service;
 
     @GetMapping
     public ResponseEntity<List<Estudiante>> getEstudiantes(
@@ -18,7 +21,6 @@ public class EstudianteController {
         return ResponseEntity.ok(service.obtenerEstudiantesOrdenados(sortBy, order));
     }
 
-    // EJERCICIO 9: Captura de errores para devolver HTTP 400 Bad Request en formato JSON
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidSortBy(IllegalArgumentException ex) {
         Map<String, Object> errorBody = new LinkedHashMap<>();
